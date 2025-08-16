@@ -1,0 +1,57 @@
+---
+- hosts: all
+  become: true
+  tasks: 
+    - name: install updates (CentOS) 
+      dnf: 
+        update_only: yes
+        update_cache: yes
+      when: ansible_distribution == "CentOS"
+
+    - name: Install update (Ubuntu)
+      apt:
+        upgrade: dist
+        update_cache: yes
+      when: ansible_distribution == "Ubuntu"
+
+- hosts: web_servers  # Changed from web_server to match inventory
+  become: true
+  tasks:
+    - name: install apache2 and php package for Ubuntu server
+      apt:
+        name: 
+          - apache2
+          - libapache2-mod-php
+        state: latest
+      when: ansible_distribution == "Ubuntu"
+
+    - name: install apache and php package for CentOS servers
+      dnf:
+        name: 
+          - httpd
+          - php
+        state: latest
+      when: ansible_distribution == "CentOS"
+
+- hosts: db_server  # Changed from db_servers to match inventory
+  become: true
+  tasks:
+    - name: install mariadb package (CentOS)
+      dnf:  # Changed from apt to dnf for CentOS
+        name: mariadb-server
+        state: latest
+      when: ansible_distribution == "CentOS"
+
+    - name: install mariadb package (Ubuntu)
+      apt: 
+        name: mariadb-server
+        state: latest
+      when: ansible_distribution == "Ubuntu"  # Fixed typo in Ubuntu
+
+- hosts: file_server  # Changed from file_servers to match inventory
+  become: true
+  tasks:
+    - name: install samba package
+      package:
+        name: samba
+        state: latest
