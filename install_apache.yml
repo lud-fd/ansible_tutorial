@@ -3,15 +3,34 @@
   become: true
   tasks:
     - name: update repository index
-      apt:
+      apt: 
         update_cache: yes
-  
+      when: ansible_distribution == ["Debian", "Ubuntu", "MX-23"]
+
     - name: install apache2 package
       apt: 
         name: apache2
         state: latest
+      when: ansible_distribution == ["Debian", "Ubuntu", "MX-23"]
 
     - name: add php support for apache2
       apt: 
         name: libapache2-mod-php
         state: latest
+      when: ansible_distribution == ["Debian", "Ubuntu", "MX-23"]
+
+    - name: update reposiyory index for MX-23
+      apt: 
+        update_cache: yes
+      when: ansible_distribution == "MX-23"
+
+    - name: install apache2 package for MX-23
+      apt: 
+        name: apache2
+        state: latest
+      when: ansible_distribution == "MX-23"
+
+    - name: add php support for apache2 for MX-23
+      apt:
+        name: libapache2-mod-php
+      when: ansible_distribution == "MX-23"
