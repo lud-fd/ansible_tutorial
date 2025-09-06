@@ -1,5 +1,21 @@
-client1@192.168.239.128 ansible_client1=ansible
-client2@192.168.239.130 ansible_client2=ansible
-client3@192.168.239.129 ansible_client3=ansible
+[all]
+client1@192.168.239.128
+client2@192.168.239.130
+client3@192.168.239.129
+centos1@192.168.239.138
+mx-23-c1@192.168.239.133
 
-centos1@192.168.239.138 ansible_centos1=ansible
+[web_servers]
+client1
+client2
+
+[db_servers]
+client3
+centos1
+
+[file_servers]
+centos1
+
+[workstations]
+mx-23-c1
+

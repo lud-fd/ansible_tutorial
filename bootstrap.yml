@@ -1,0 +1,41 @@
+---
+- hosts: all
+  become: true
+  pre_tasks:
+    - name: Install updates (CentOS)
+      tags: always
+      dnf:
+        update_only: yes
+        update_cache: yes
+      when: ansible_distribution == "CentOS"
+
+    - name: Install updates (Ubuntu)
+      tags: always
+      apt:
+        upgrade: dist
+        update_cache: yes
+      when: ansible_distribution == "Ubuntu"
+
+- hosts: all
+  become: true
+  tasks:
+    - name: Create simon user
+      tags: always
+      user:
+        name: simon
+        group: root
+
+    - name: Add SSH key for simon
+      tags: always
+      authorized_key:
+        user: simon
+        key: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIjEiDUCN/g7+v7mnMzEYSyAeY1M9Bc9fUP+u2eDAPeK ansible
+
+    - name: Configure sudoers for simon
+      tags: always
+      copy:
+        content: "simon ALL=(ALL) NOPASSWD:ALL"
+        dest: /etc/sudoers.d/simon
+        owner: root
+        group: root
+        mode: 0440

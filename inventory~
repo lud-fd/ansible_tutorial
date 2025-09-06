@@ -1,0 +1,9 @@
+[web_servers]
+client1@192.168.239.128
+client2@192.168.239.130
+
+[db_servers]
+client3@192.168.239.129
+
+[file_servers]
+centos1@192.168.239.138
